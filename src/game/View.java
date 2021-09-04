@@ -17,6 +17,7 @@ public class View implements ViewInterface{
         screen.clear();
         model.getSnake().forEach(l -> screen.draw(l.getColor(), l.location));
         model.getApples().forEach(e -> screen.draw(e.getColor(), e.location));
+        screen.commitChange();
 
     }
 }

@@ -16,7 +16,7 @@ public class Main {
         while (gameLoop) {
             model.actSnake();
             int random = Constants.RG.nextInt(1000);
-            if (random % 50 == 0) {
+            if (random % 25 == 0) {
                 model.addApple(new NormalApple());
             }
             if (random % 201 == 0) {

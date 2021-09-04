@@ -27,6 +27,12 @@ public class Screen extends JFrame implements KeyListener {
     public void clear() {
         panel.removeAll();
         //panel.revalidate();
+        //panel.repaint();
+    }
+
+    public void commitChange() {
+        //panel.removeAll();
+        panel.revalidate();
         panel.repaint();
     }
 
@@ -36,7 +42,6 @@ public class Screen extends JFrame implements KeyListener {
         rectangle.setMinimumSize(new Dimension(Constants.STEP_SIZE, Constants.STEP_SIZE));
         rectangle.setMaximumSize(new Dimension(Constants.STEP_SIZE, Constants.STEP_SIZE));
         rectangle.setPreferredSize(new Dimension(Constants.STEP_SIZE, Constants.STEP_SIZE));
-        //setLocationRelativeTo(this);
 
         panel.setLayout(null);
 
@@ -44,10 +49,8 @@ public class Screen extends JFrame implements KeyListener {
         rectangle.setLocation(p);
 
         panel.add(rectangle);
-
-        panel.revalidate();
-        panel.repaint();
-
+        //panel.revalidate();
+        //panel.repaint();
     }
 
     @Override

@@ -12,7 +12,7 @@ public enum Direction {
 
         @Override
         public Point newLocationAfterMoving(Point currentLocation) {
-            return new Point(currentLocation.x, currentLocation.y - Constants.STEP_SIZE > 0 ? currentLocation.y - Constants.STEP_SIZE : Constants.SCREEN_HEIGHT);
+            return new Point(currentLocation.x, currentLocation.y - Constants.STEP_SIZE >= 0 ? currentLocation.y - Constants.STEP_SIZE : Constants.SCREEN_HEIGHT);
         }
     }, RIGHT {
         @Override
@@ -42,7 +42,7 @@ public enum Direction {
 
         @Override
         public Point newLocationAfterMoving(Point currentLocation) {
-            return new Point(currentLocation.x - Constants.STEP_SIZE > 0 ? currentLocation.x - Constants.STEP_SIZE : Constants.SCREEN_WIDTH, currentLocation.y);
+            return new Point(currentLocation.x - Constants.STEP_SIZE >= 0 ? currentLocation.x - Constants.STEP_SIZE : Constants.SCREEN_WIDTH, currentLocation.y);
         }
     };
 

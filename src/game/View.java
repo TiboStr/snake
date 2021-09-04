@@ -15,6 +15,8 @@ public class View implements ViewInterface{
     @Override
     public void modelHasChanged() {
         screen.clear();
-        model.getSnake().forEach(l -> screen.draw(l.getGraphics(), l.getLocation()));
+        model.getSnake().forEach(l -> screen.draw(l.getColor(), l.location));
+        model.getApples().forEach(e -> screen.draw(e.getColor(), e.location));
+
     }
 }

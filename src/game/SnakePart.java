@@ -2,13 +2,13 @@ package game;
 
 import java.awt.*;
 
-public class SnakePart {
+public class SnakePart extends WorldObject {
 
-    protected Point location;
     protected Direction direction;
     protected Model model;
 
     public SnakePart(Model model, Point startingLocation, Direction direction) {
+        super(startingLocation);
         this.model = model;
         this.location = startingLocation;
         this.direction = direction;
@@ -18,19 +18,17 @@ public class SnakePart {
         return direction;
     }
 
-    public Point getLocation() {
-        return location;
-    }
 
     public void move() {
         SnakePart neighbour = model.getNeighbouringPart(this);
-        this.location = neighbour.getLocation();
+        this.location = neighbour.location;
         this.direction = neighbour.getDirection();
 
 
     }
 
-    public Color getGraphics() {
+    @Override
+    public Color getColor() {
         return new Color(102, 227, 135);
 
     }

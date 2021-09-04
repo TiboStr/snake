@@ -15,8 +15,8 @@ public class Screen extends JFrame implements KeyListener {
         this.model = model;
         this.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setBackground(Color.white);
         panel = new JPanel();
+        panel.setBackground(new Color(216, 230, 209));
         panel.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         this.getContentPane().add(panel);
         this.addKeyListener(this);
@@ -26,7 +26,7 @@ public class Screen extends JFrame implements KeyListener {
 
     public void clear() {
         panel.removeAll();
-        panel.revalidate();
+        //panel.revalidate();
         panel.repaint();
     }
 
@@ -55,27 +55,22 @@ public class Screen extends JFrame implements KeyListener {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_KP_UP:
             case KeyEvent.VK_UP:
-                System.out.println("up");
-                model.moveSnake(Direction.UP);
+                model.actSnake(Direction.UP);
                 break;
             case KeyEvent.VK_KP_RIGHT:
             case KeyEvent.VK_RIGHT:
-                System.out.println("right");
-                model.moveSnake(Direction.RIGHT);
+                model.actSnake(Direction.RIGHT);
                 break;
             case KeyEvent.VK_KP_DOWN:
             case KeyEvent.VK_DOWN:
-                System.out.println("down");
-                model.moveSnake(Direction.DOWN);
+                model.actSnake(Direction.DOWN);
                 break;
             case KeyEvent.VK_KP_LEFT:
             case KeyEvent.VK_LEFT:
-                System.out.println("left");
-                model.moveSnake(Direction.LEFT);
+                model.actSnake(Direction.LEFT);
                 break;
             default:
-                model.moveSnake();
-
+                model.actSnake();
         }
     }
 

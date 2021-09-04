@@ -1,8 +1,5 @@
 package game;
 
-import java.io.IOException;
-
-
 
 public class Main {
 
@@ -15,9 +12,17 @@ public class Main {
         View view = new View(model, screen);
 
         boolean gameLoop = true;
+        model.addApple(new NormalApple());
         while (gameLoop) {
-            model.moveSnake();
-            Thread.sleep(200);
+            model.actSnake();
+            int random = Constants.RG.nextInt(1000);
+            if (random % 50 == 0) {
+                model.addApple(new NormalApple());
+            }
+            if (random % 201 == 0) {
+                model.addApple(new SpecialApple());
+            }
+            Thread.sleep(Constants.STEP_TIME_MILLIS);
         }
 
     }

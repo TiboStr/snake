@@ -8,9 +8,9 @@ import java.util.stream.IntStream;
 
 public class Model implements ModelInterface {
 
-    private List<ViewInterface> listeners;
-    private List<SnakePart> snake;
-    private List<Apple> apples;
+    private final List<ViewInterface> listeners;
+    private final List<SnakePart> snake;
+    private final List<Apple> apples;
 
     private int score;
 
@@ -23,12 +23,9 @@ public class Model implements ModelInterface {
 
         this.snake.add(new SnakeHead(this, new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
         this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - 2*Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-
+        this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - 2 * Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
 
     }
-
-
 
     public SnakePart getNeighbouringPart(SnakePart snakePart) {
         int index = snake.indexOf(snakePart);
@@ -38,7 +35,7 @@ public class Model implements ModelInterface {
         if (index == 0) {
             throw new AssertionError("Head element");
         }
-        return snake.get(index-1);
+        return snake.get(index - 1);
     }
 
     public void addApple(Apple apple) {
@@ -51,16 +48,16 @@ public class Model implements ModelInterface {
     }
 
     public void addSnakeTail() {
-        SnakePart last = this.snake.get(this.snake.size()-1);
-        this.snake.add(new SnakePart(this, last.direction.getOpposite().newLocationAfterMoving(last.location), last.getDirection()));
+        SnakePart last = this.snake.get(this.snake.size() - 1);
+        this.snake.add(new SnakePart(this, last.getDirection().getOpposite().newLocationAfterMoving(last.getLocation()), last.getDirection()));
     }
 
     public void actApple() {
-        Point headLocation = snake.get(0).location;
+        Point headLocation = snake.get(0).getLocation();
         Iterator<Apple> it = apples.iterator();
         while (it.hasNext()) {
             Apple current = it.next();
-            if (current.location.distance(headLocation) < Constants.STEP_SIZE) {
+            if (current.getLocation().distance(headLocation) < Constants.STEP_SIZE) {
                 score += current.getPoints();
                 it.remove();
                 IntStream.range(0, current.getGrowth()).forEach(i -> addSnakeTail());
@@ -71,9 +68,9 @@ public class Model implements ModelInterface {
     }
 
     public boolean snakeBitesTail() {
-        Point headPosition = this.snake.get(0).location;
+        Point headPosition = this.snake.get(0).getLocation();
         for (int i = 1; i < this.snake.size(); i++) {
-            if (headPosition.distance(this.snake.get(i).location) < Constants.STEP_SIZE) {
+            if (headPosition.distance(this.snake.get(i).getLocation()) < Constants.STEP_SIZE) {
                 return true;
             }
         }

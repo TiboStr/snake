@@ -9,12 +9,12 @@ public class SnakeHead extends SnakePart {
     }
 
     public void move(Direction direction) {
-        if (direction == this.direction || direction.getOpposite() == this.direction) {
-            this.location = this.direction.newLocationAfterMoving(this.location);
+        if (direction == this.getDirection() || direction.getOpposite() == this.getDirection()) {
+            this.setLocation(this.getDirection().newLocationAfterMoving(this.getLocation()));
         } else {
-            this.location = direction.newLocationAfterMoving(this.location);
+            this.setLocation(direction.newLocationAfterMoving(this.getLocation()));
 
-            this.direction = direction;
+            this.setDirection(direction);
         }
     }
 

@@ -4,13 +4,12 @@ import java.awt.*;
 
 public class SnakePart extends WorldObject {
 
-    protected Direction direction;
-    protected Model model;
+    private Direction direction;
+    private final Model model;
 
     public SnakePart(Model model, Point startingLocation, Direction direction) {
         super(startingLocation);
         this.model = model;
-        this.location = startingLocation;
         this.direction = direction;
     }
 
@@ -18,20 +17,19 @@ public class SnakePart extends WorldObject {
         return direction;
     }
 
+    public void setDirection(Direction dir) {
+        this.direction = dir;
+    }
 
     public void move() {
         SnakePart neighbour = model.getNeighbouringPart(this);
-        this.location = neighbour.location;
+        this.setLocation(neighbour.getLocation());
         this.direction = neighbour.getDirection();
-
-
     }
 
     @Override
     public Color getColor() {
         return new Color(102, 227, 135);
-
     }
-
 
 }

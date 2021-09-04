@@ -1,9 +1,9 @@
 package game;
 
-public class View implements ViewInterface{
+public class View implements ViewInterface {
 
-    private Model model;
-    private Screen screen;
+    private final Model model;
+    private final Screen screen;
 
     public View(Model model, Screen screen) {
         this.model = model;
@@ -15,9 +15,9 @@ public class View implements ViewInterface{
     @Override
     public void modelHasChanged() {
         screen.clear();
-        model.getSnake().forEach(l -> screen.draw(l.getColor(), l.location));
-        model.getApples().forEach(e -> screen.draw(e.getColor(), e.location));
+        model.getSnake().forEach(s -> screen.draw(s.getColor(), s.getLocation()));
+        model.getApples().forEach(a -> screen.draw(a.getColor(), a.getLocation()));
         screen.commitChange();
-
     }
+
 }

@@ -9,7 +9,6 @@ public class NormalApple extends Apple {
         return Color.RED;
     }
 
-
     @Override
     public int getPoints() {
         return 1;
@@ -17,7 +16,7 @@ public class NormalApple extends Apple {
 
     @Override
     int getGrowth() {
-        return 1;
+        return 2;
     }
 
     @Override

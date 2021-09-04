@@ -11,7 +11,7 @@ public class SpecialApple extends Apple {
 
     @Override
     int getGrowth() {
-        return 3;
+        return 5;
     }
 
     @Override

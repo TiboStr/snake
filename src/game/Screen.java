@@ -7,8 +7,8 @@ import java.awt.event.KeyListener;
 
 public class Screen extends JFrame implements KeyListener {
 
-    private JPanel panel;
-    private Model model;
+    private final JPanel panel;
+    private final Model model;
 
     public Screen(Model model) {
         super("Snake");
@@ -26,12 +26,9 @@ public class Screen extends JFrame implements KeyListener {
 
     public void clear() {
         panel.removeAll();
-        //panel.revalidate();
-        //panel.repaint();
     }
 
     public void commitChange() {
-        //panel.removeAll();
         panel.revalidate();
         panel.repaint();
     }
@@ -49,8 +46,6 @@ public class Screen extends JFrame implements KeyListener {
         rectangle.setLocation(p);
 
         panel.add(rectangle);
-        //panel.revalidate();
-        //panel.repaint();
     }
 
     @Override

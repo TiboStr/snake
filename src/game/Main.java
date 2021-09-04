@@ -1,6 +1,5 @@
 package game;
 
-
 public class Main {
 
     private static boolean gameLoop = true;

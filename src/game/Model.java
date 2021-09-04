@@ -13,6 +13,7 @@ public class Model implements ModelInterface {
     private final List<Apple> apples;
 
     private int score;
+    private boolean gameOver;
 
     public Model() {
 
@@ -20,11 +21,49 @@ public class Model implements ModelInterface {
         this.snake = new ArrayList<>();
         this.apples = new ArrayList<>();
         this.score = 0;
+        this.gameOver = false;
 
         this.snake.add(new SnakeHead(this, new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - 2 * Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
+        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - 2 * Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
 
+    }
+
+    public void resetModel() {
+        this.snake.clear();
+        this.apples.clear();
+        this.score = 0;
+        this.snake.add(new SnakeHead(this, new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        addSnakeTail();
+        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
+        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - 2 * Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
+        //notifyListeners();
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean state) {
+        gameOver = state;
+        notifyListeners();
     }
 
     public SnakePart getNeighbouringPart(SnakePart snakePart) {
@@ -78,13 +117,17 @@ public class Model implements ModelInterface {
     }
 
     public void actSnake(Direction dir) {
-        IntStream.range(1, snake.size()).map(i -> snake.size() - i).forEach(i -> snake.get(i).move());
-        ((SnakeHead) snake.get(0)).move(dir);
-        actApple();
-        notifyListeners();
-        if (snakeBitesTail()) {
-            Main.gameOver();
+        if (!gameOver) {
+            IntStream.range(1, snake.size()).map(i -> snake.size() - i).forEach(i -> snake.get(i).move());
+            ((SnakeHead) snake.get(0)).move(dir);
+            actApple();
+
+            if (snakeBitesTail()) {
+                gameOver = true;
+                resetModel();
+            }
         }
+        notifyListeners();
     }
 
     public void actSnake() {

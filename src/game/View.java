@@ -14,10 +14,15 @@ public class View implements ViewInterface {
 
     @Override
     public void modelHasChanged() {
-        screen.clear();
-        model.getSnake().forEach(s -> screen.draw(s.getColor(), s.getLocation()));
-        model.getApples().forEach(a -> screen.draw(a.getColor(), a.getLocation()));
-        screen.commitChange();
-    }
 
+        if (!model.isGameOver()) {
+            screen.clear();
+            if (model.getSnake().size() <= 1) {
+                System.out.print("fout");
+            }
+            model.getSnake().forEach(s -> screen.draw(s.getColor(), s.getLocation()));
+            model.getApples().forEach(a -> screen.draw(a.getColor(), a.getLocation()));
+            screen.commitChange();
+        }
+    }
 }

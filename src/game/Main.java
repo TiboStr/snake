@@ -3,15 +3,22 @@ package game;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    private static boolean gameLoop = true;
 
-        System.out.println("snake");
+    public static void gameOver() {
+        gameLoop = false;
+    }
+
+    public static boolean isGameOver() {
+        return gameLoop;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
 
         Model model = new Model();
         Screen screen = new Screen(model);
         View view = new View(model, screen);
 
-        boolean gameLoop = true;
         model.addApple(new NormalApple());
         while (gameLoop) {
             model.actSnake();
@@ -24,6 +31,7 @@ public class Main {
             }
             Thread.sleep(Constants.STEP_TIME_MILLIS);
         }
+        System.exit(0);
 
     }
 }

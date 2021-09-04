@@ -70,11 +70,24 @@ public class Model implements ModelInterface {
         }
     }
 
+    public boolean snakeBitesTail() {
+        Point headPosition = this.snake.get(0).location;
+        for (int i = 1; i < this.snake.size(); i++) {
+            if (headPosition.distance(this.snake.get(i).location) < Constants.STEP_SIZE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void actSnake(Direction dir) {
         IntStream.range(1, snake.size()).map(i -> snake.size() - i).forEach(i -> snake.get(i).move());
         ((SnakeHead) snake.get(0)).move(dir);
         actApple();
         notifyListeners();
+        if (snakeBitesTail()) {
+            Main.gameOver();
+        }
     }
 
     public void actSnake() {

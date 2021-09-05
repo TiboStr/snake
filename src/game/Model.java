@@ -1,16 +1,18 @@
 package game;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.IntStream;
 
 public class Model implements ModelInterface {
 
     private final List<ViewInterface> listeners;
-    private final List<SnakePart> snake;
-    private final List<Apple> apples;
+    private CopyOnWriteArrayList<SnakePart> snake;
+    private CopyOnWriteArrayList<Apple> apples;
 
     private int score;
     private boolean gameOver;
@@ -18,43 +20,15 @@ public class Model implements ModelInterface {
     public Model() {
 
         this.listeners = new ArrayList<>();
-        this.snake = new ArrayList<>();
-        this.apples = new ArrayList<>();
-        this.score = 0;
         this.gameOver = false;
-
-        this.snake.add(new SnakeHead(this, new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - 2 * Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-
+        resetModel();
     }
 
     public void resetModel() {
-        this.snake.clear();
-        this.apples.clear();
+        this.snake = new CopyOnWriteArrayList<>(List.of(new SnakeHead(this, new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT)));
+        IntStream.range(0,6).forEach( i -> addSnakeTail());
+        this.apples = new CopyOnWriteArrayList<>(List.of(new NormalApple()));
         this.score = 0;
-        this.snake.add(new SnakeHead(this, new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        addSnakeTail();
-        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        //this.snake.add(new SnakePart(this, new Point(Constants.SCREEN_WIDTH / 2 - 2 * Constants.STEP_SIZE, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT));
-        //notifyListeners();
     }
 
     public boolean isGameOver() {
@@ -64,6 +38,7 @@ public class Model implements ModelInterface {
     public void setGameOver(boolean state) {
         gameOver = state;
         notifyListeners();
+
     }
 
     public SnakePart getNeighbouringPart(SnakePart snakePart) {
@@ -86,6 +61,10 @@ public class Model implements ModelInterface {
         return apples;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public void addSnakeTail() {
         SnakePart last = this.snake.get(this.snake.size() - 1);
         this.snake.add(new SnakePart(this, last.getDirection().getOpposite().newLocationAfterMoving(last.getLocation()), last.getDirection()));
@@ -93,17 +72,15 @@ public class Model implements ModelInterface {
 
     public void actApple() {
         Point headLocation = snake.get(0).getLocation();
-        Iterator<Apple> it = apples.iterator();
-        while (it.hasNext()) {
-            Apple current = it.next();
-            if (current.getLocation().distance(headLocation) < Constants.STEP_SIZE) {
-                score += current.getPoints();
-                it.remove();
-                IntStream.range(0, current.getGrowth()).forEach(i -> addSnakeTail());
-            } else if (current.isDead()) {
-                it.remove();
+        List<Apple> toRemove = new ArrayList<>();
+        for (Apple apple : apples) {
+            if (apple.getLocation().distance(headLocation) < Constants.STEP_SIZE) {
+                toRemove.add(apple);
+                IntStream.range(0, apple.getGrowth()).forEach(i -> addSnakeTail());
+                score += apple.getPoints();
             }
         }
+        apples.removeAll(toRemove);
     }
 
     public boolean snakeBitesTail() {

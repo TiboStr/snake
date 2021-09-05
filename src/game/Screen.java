@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Screen extends JFrame implements KeyListener {
 
@@ -11,6 +15,11 @@ public class Screen extends JFrame implements KeyListener {
     private final JLayeredPane layeredPane;
     private final JPanel panel;
     private final JPanel scorePanel;
+
+    private JLabel scoreLabel;
+    private JLabel highscoreLabel;
+
+    private int highscore;
 
     private final Model model;
     private volatile boolean aKeyIsPressed;
@@ -21,7 +30,7 @@ public class Screen extends JFrame implements KeyListener {
         this.model = model;
         this.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLayout(null);
+        setLayout(null);
         contentPane = new JPanel();
 
         getContentPane().add(contentPane);
@@ -36,14 +45,21 @@ public class Screen extends JFrame implements KeyListener {
 
         scorePanel = new JPanel();
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
+        scorePanel.setOpaque(false);
 
         int w = Constants.SCREEN_WIDTH/10;
         int h = Constants.SCREEN_HEIGHT/15;
-        scorePanel.setSize(w, h);
-        scorePanel.setLocation(new Point(Constants.SCREEN_WIDTH - w, 0));
+        scorePanel.setSize(Constants.SCREEN_WIDTH, h);
+
         scorePanel.setBackground(new Color(233, 237, 232));
-        scorePanel.add(new JLabel("Score: "));
-        scorePanel.add(new JLabel("Highscore: "));
+
+
+        scoreLabel = new JLabel("Score: 0");
+
+        highscore = 0;
+        highscoreLabel = new JLabel("Highscore: " + highscore);
+        scorePanel.add(scoreLabel);
+        scorePanel.add(highscoreLabel);
 
         layeredPane.add(panel, Integer.valueOf(0));
         layeredPane.add(scorePanel, Integer.valueOf(1));
@@ -55,9 +71,17 @@ public class Screen extends JFrame implements KeyListener {
         this.setResizable(false);
     }
 
+    public void setScore(int score) {
+        scoreLabel.setText("Score: " + score);
+        if (score > highscore) {
+            highscore = score;
+            highscoreLabel.setText("Highscore: " + highscore);
+        }
+    }
+
     public void gameOverScreen() {
         aKeyIsPressed = false;
-        SwingUtilities.invokeLater(new Thread(this::clear));
+       clear();
 
         panel.setLayout(new FlowLayout());
 

@@ -16,7 +16,7 @@ public class NormalApple extends Apple {
 
     @Override
     int getGrowth() {
-        return 2;
+        return 4;
     }
 
     @Override

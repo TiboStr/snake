@@ -11,5 +11,7 @@ Make sure you are able to run `javac` and `java`. You don't need any external li
 3. `$ javac game/Main.java`
 4. `$ java game/Main`
 
+Or you can simply execute the JAR file by cloning this repository and typing `cd snake && java -jar snake.jar` into your terminal.
+
 ## Screenshot
 ![snake](screenshot.png)

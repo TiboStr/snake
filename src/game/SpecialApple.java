@@ -15,12 +15,8 @@ public class SpecialApple extends Apple {
     }
 
     @Override
-    boolean isDead() {
-        return Constants.RG.nextInt(100) == 1;
+    Color getColor() {
+        return new Color(255, 215, 0);
     }
 
-    @Override
-    Color getColor() {
-        return new Color(255,215,0);
-    }
 }

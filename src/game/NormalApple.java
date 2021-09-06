@@ -19,8 +19,4 @@ public class NormalApple extends Apple {
         return 4;
     }
 
-    @Override
-    boolean isDead() {
-        return Constants.RG.nextInt(1000) == 1;
-    }
 }

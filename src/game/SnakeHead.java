@@ -13,7 +13,6 @@ public class SnakeHead extends SnakePart {
             this.setLocation(this.getDirection().newLocationAfterMoving(this.getLocation()));
         } else {
             this.setLocation(direction.newLocationAfterMoving(this.getLocation()));
-
             this.setDirection(direction);
         }
     }

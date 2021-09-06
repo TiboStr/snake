@@ -12,5 +12,4 @@ public abstract class Apple extends WorldObject {
 
     abstract int getGrowth();
 
-    abstract boolean isDead();
 }

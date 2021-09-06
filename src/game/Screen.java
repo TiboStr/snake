@@ -4,20 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Screen extends JFrame implements KeyListener {
 
-    private final JPanel contentPane;
-    private final JLayeredPane layeredPane;
-    private final JPanel panel;
-    private final JPanel scorePanel;
+    private final JPanel mainPanel;
 
-    private JLabel scoreLabel;
-    private JLabel highscoreLabel;
+    private final JLabel scoreLabel;
+    private final JLabel highscoreLabel;
 
     private int highscore;
 
@@ -28,47 +21,34 @@ public class Screen extends JFrame implements KeyListener {
         super("Snake");
         this.aKeyIsPressed = false;
         this.model = model;
-        this.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
-        contentPane = new JPanel();
+        addKeyListener(this);
+        setVisible(true);
+        setResizable(false);
 
-        getContentPane().add(contentPane);
-
-        layeredPane = new JLayeredPane();
+        JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        add(layeredPane);
+        getContentPane().add(layeredPane);
 
-        panel = new JPanel();
-        panel.setBackground(new Color(216, 230, 209));
-        panel.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        this.mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(216, 230, 209));
+        mainPanel.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 
-        scorePanel = new JPanel();
+        JPanel scorePanel = new JPanel();
         scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
         scorePanel.setOpaque(false);
-
-        int w = Constants.SCREEN_WIDTH/10;
-        int h = Constants.SCREEN_HEIGHT/15;
-        scorePanel.setSize(Constants.SCREEN_WIDTH, h);
-
-        scorePanel.setBackground(new Color(233, 237, 232));
-
+        scorePanel.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT / 15);
 
         scoreLabel = new JLabel("Score: 0");
+        highscoreLabel = new JLabel("Highscore: " + (highscore = 0));
 
-        highscore = 0;
-        highscoreLabel = new JLabel("Highscore: " + highscore);
         scorePanel.add(scoreLabel);
         scorePanel.add(highscoreLabel);
 
-        layeredPane.add(panel, Integer.valueOf(0));
+        layeredPane.add(mainPanel, Integer.valueOf(0));
         layeredPane.add(scorePanel, Integer.valueOf(1));
-        layeredPane.revalidate();
-        layeredPane.repaint();
-
-        this.addKeyListener(this);
-        this.setVisible(true);
-        this.setResizable(false);
     }
 
     public void setScore(int score) {
@@ -81,14 +61,15 @@ public class Screen extends JFrame implements KeyListener {
 
     public void gameOverScreen() {
         aKeyIsPressed = false;
-       clear();
+        clear();
 
-        panel.setLayout(new FlowLayout());
+        mainPanel.setLayout(new FlowLayout());
 
         JLabel label = new JLabel("Game over, press any key to restart the game");
         label.setVisible(true);
 
-        panel.add(label);
+        mainPanel.add(label);
+        mainPanel.revalidate();
         commitChange();
 
         while (!aKeyIsPressed) {
@@ -98,28 +79,22 @@ public class Screen extends JFrame implements KeyListener {
     }
 
     public void clear() {
-        panel.removeAll();
-        panel.revalidate();
+        mainPanel.removeAll();
     }
 
     public void commitChange() {
-        panel.revalidate();
-        panel.repaint();
+        mainPanel.repaint();
     }
 
     public void draw(Color c, Point p) {
         JPanel rectangle = new JPanel();
         rectangle.setSize(Constants.STEP_SIZE, Constants.STEP_SIZE);
-        rectangle.setMinimumSize(new Dimension(Constants.STEP_SIZE, Constants.STEP_SIZE));
-        rectangle.setMaximumSize(new Dimension(Constants.STEP_SIZE, Constants.STEP_SIZE));
-        rectangle.setPreferredSize(new Dimension(Constants.STEP_SIZE, Constants.STEP_SIZE));
-
-        panel.setLayout(null);
+        mainPanel.setLayout(null);
 
         rectangle.setBackground(c);
         rectangle.setLocation(p);
 
-        panel.add(rectangle);
+        mainPanel.add(rectangle);
     }
 
     @Override

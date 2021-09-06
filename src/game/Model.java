@@ -1,9 +1,7 @@
 package game;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.IntStream;
@@ -11,22 +9,21 @@ import java.util.stream.IntStream;
 public class Model implements ModelInterface {
 
     private final List<ViewInterface> listeners;
-    private CopyOnWriteArrayList<SnakePart> snake;
+    private CopyOnWriteArrayList<SnakePart> snake; // CopyOnWriteArrayList as temporary fix for ConcurrentModificationException
     private CopyOnWriteArrayList<Apple> apples;
 
     private int score;
     private boolean gameOver;
 
     public Model() {
-
         this.listeners = new ArrayList<>();
         this.gameOver = false;
         resetModel();
     }
 
-    public void resetModel() {
+    private void resetModel() {
         this.snake = new CopyOnWriteArrayList<>(List.of(new SnakeHead(this, new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT / 2), Direction.RIGHT)));
-        IntStream.range(0,6).forEach( i -> addSnakeTail());
+        IntStream.range(0, 6).forEach(i -> addSnakeTail());
         this.apples = new CopyOnWriteArrayList<>(List.of(new NormalApple()));
         this.score = 0;
     }
@@ -35,10 +32,13 @@ public class Model implements ModelInterface {
         return gameOver;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public void setGameOver(boolean state) {
         gameOver = state;
         notifyListeners();
-
     }
 
     public SnakePart getNeighbouringPart(SnakePart snakePart) {
@@ -61,10 +61,6 @@ public class Model implements ModelInterface {
         return apples;
     }
 
-    public int getScore() {
-        return score;
-    }
-
     public void addSnakeTail() {
         SnakePart last = this.snake.get(this.snake.size() - 1);
         this.snake.add(new SnakePart(this, last.getDirection().getOpposite().newLocationAfterMoving(last.getLocation()), last.getDirection()));
@@ -83,7 +79,7 @@ public class Model implements ModelInterface {
         apples.removeAll(toRemove);
     }
 
-    public boolean snakeBitesTail() {
+    public boolean doesSnakeBiteTail() {
         Point headPosition = this.snake.get(0).getLocation();
         for (int i = 1; i < this.snake.size(); i++) {
             if (headPosition.distance(this.snake.get(i).getLocation()) < Constants.STEP_SIZE) {
@@ -99,7 +95,7 @@ public class Model implements ModelInterface {
             ((SnakeHead) snake.get(0)).move(dir);
             actApple();
 
-            if (snakeBitesTail()) {
+            if (doesSnakeBiteTail()) {
                 gameOver = true;
                 resetModel();
             }
